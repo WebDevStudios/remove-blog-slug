@@ -6,6 +6,7 @@
     Author: WebDevStudios
     Version: 1.0
     Author URI: http://webdevstudios.com
+    License: GPLv2
  */
 
 class Remove_Blog_Slug {
