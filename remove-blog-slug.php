@@ -4,7 +4,7 @@
     Plugin URI: http://webdevstudios.com
     Description: Removes /blog from permalinks once they've been generated
     Author: WebDevStudios
-    Version: 1.0
+    Version: 1.0.1
     Author URI: http://webdevstudios.com
     License: GPLv2
  */
@@ -14,6 +14,7 @@ class Remove_Blog_Slug {
     public function __construct() {
 
         add_action( 'admin_menu', array( $this, 'remove_blog_slug_menu' ) );
+        add_action( 'admin_menu', array( $this, 'permalinks_update_reminder' ) );
 
     }
 
@@ -28,6 +29,23 @@ class Remove_Blog_Slug {
     public function remove_blog_slug_menu() {
 
         add_options_page( 'Remove /blog Slug', 'Remove /blog Slug', 'manage_options', 'remove-blog-slug', array( $this, 'remove_blog_slug_page' ) );
+
+    }
+
+
+    /**
+     * Adds notice on permalinks screen to remind to remove /blog
+     *
+     * @since  1.0.1
+     *
+     * @return void
+     */
+    public function permalinks_update_reminder() {
+
+        global $pagenow;
+
+        if ( ( 'options-permalink.php' == $pagenow ) && ( ! empty( $_GET['settings-updated'] ) ) )
+            add_settings_error( 'permalink', esc_attr( 'settings_updated' ), 'Remove /blog Slug plugin is active. You may want to <a href="options-general.php?page=remove-blog-slug">run that now</a> since you\'ve flushed permalinks.', 'updated' );
 
     }
 
