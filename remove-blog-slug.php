@@ -2,9 +2,9 @@
 /*
     Plugin Name: Remove /blog slug
     Plugin URI: http://webdevstudios.com
-    Description: Removes /blog from permalinks once they've been generated
+    Description: Removes /blog from permalinks and default taxonomy bases once they've been generated.
     Author: WebDevStudios
-    Version: 1.0.1
+    Version: 1.0.2
     Author URI: http://webdevstudios.com
     License: GPLv2
  */
@@ -82,8 +82,12 @@ class Remove_Blog_Slug {
 
         $rules     = $this->update_rewrite_rules();
 
-        // If both options were updated, success!
-        if ( $structure && $rules ) {
+        $cat_base  = $this->update_category_base();
+
+        $tag_base  = $this->update_tag_base();
+
+        // If any options were updated, success!
+        if ( ( $structure && $rules ) || $cat_base || $tag_base ) {
 
             add_settings_error( 'remove_blog_slug', esc_attr( 'settings_updated' ), 'Updated rules successfully!', 'updated' );
 
@@ -146,6 +150,46 @@ class Remove_Blog_Slug {
         $new_rules = update_option( 'rewrite_rules', $new_rules );
 
         return $new_rules;
+
+    }
+
+
+    /**
+     * Update 'category_base' option
+     *
+     * @since  1.0.2
+     *
+     * @return bool  True if option was updated, false on failure
+     */
+    protected function update_category_base() {
+
+        $cat_base = get_option( 'category_base' );
+
+        $cat_base = str_replace( 'blog/', '', $cat_base );
+
+        $cat_base = update_option( 'category_base', $cat_base );
+
+        return $cat_base;
+
+    }
+
+
+    /**
+     * Update 'tag_base' option
+     *
+     * @since  1.0.2
+     *
+     * @return bool  True if option was updated, false on failure
+     */
+    protected function update_tag_base() {
+
+        $tag_base = get_option( 'tag_base' );
+
+        $tag_base = str_replace( 'blog/', '', $tag_base );
+
+        $tag_base = update_option( 'tag_base', $tag_base );
+
+        return $tag_base;
 
     }
 
