@@ -1,0 +1,5 @@
+{
+    "name": "webdevstudios/remove-blog-slug",
+    "type": "wordpress-plugin",
+    "require": {}
+}
